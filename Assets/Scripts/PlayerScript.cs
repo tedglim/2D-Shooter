@@ -19,15 +19,29 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private float _lowBoundY;
 
-    // Start is called before the first frame update
+    [SerializeField]
+    private GameObject _laserPrefab;
+
+    [SerializeField]
+    private float _laserOffsetY;
+
+    [SerializeField]
+    private float _fireRate;
+
+    private float _canFire = -1;
+
     void Start()
     {
+        // Instantiate(prefab, Vector3.zero, Quaternion.identity);
     }
 
-    // Update is called once per frame
     void Update()
     {
         MovePlayer();
+        if (Input.GetKey(KeyCode.Space) && Time.time > _canFire)
+        {
+            FireLaser();
+        }
     }
 
     private void MovePlayer()
@@ -69,5 +83,15 @@ public class PlayerScript : MonoBehaviour
                     transform.position.y,
                     transform.position.z);
         }
+    }
+
+    private void FireLaser()
+    {
+        _canFire = Time.time + _fireRate;
+        Vector3 laserStartPos =
+            new Vector3(transform.position.x,
+                transform.position.y + _laserOffsetY,
+                transform.position.z);
+        Instantiate(_laserPrefab, laserStartPos, Quaternion.identity);
     }
 }
