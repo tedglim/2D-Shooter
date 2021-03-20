@@ -29,6 +29,8 @@ public class PlayerScript : MonoBehaviour
     private float _fireRate;
 
     private float _canFire = -1;
+    [SerializeField]
+    private int _lives = 3;
 
     void Start()
     {
@@ -93,5 +95,14 @@ public class PlayerScript : MonoBehaviour
                 transform.position.y + _laserOffsetY,
                 transform.position.z);
         Instantiate(_laserPrefab, laserStartPos, Quaternion.identity);
+    }
+
+    public void Damage()
+    {
+        _lives--;
+        if(_lives < 1)
+        {
+            Destroy(transform.gameObject);
+        }
     }
 }
