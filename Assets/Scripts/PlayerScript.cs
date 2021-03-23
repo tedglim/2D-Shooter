@@ -32,9 +32,15 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
 
+    private SpawnMangerScript _spawnManagerScript;
+
     void Start()
     {
-        // Instantiate(prefab, Vector3.zero, Quaternion.identity);
+        _spawnManagerScript = GameObject.Find("Spawn_Manager").GetComponent<SpawnMangerScript>();
+        if(_spawnManagerScript == null)
+        {
+            Debug.LogError("Spawn Manager is Null");
+        }
     }
 
     void Update()
@@ -103,6 +109,7 @@ public class PlayerScript : MonoBehaviour
         if(_lives < 1)
         {
             Destroy(transform.gameObject);
+            _spawnManagerScript.OnPlayerDeath();
         }
     }
 }
