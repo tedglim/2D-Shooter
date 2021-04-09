@@ -23,21 +23,30 @@ public class PlayerScript : MonoBehaviour
     private GameObject _laserPrefab;
 
     [SerializeField]
+    private GameObject _tripleShotPrefab;
+
+    [SerializeField]
     private float _laserOffsetY;
 
     [SerializeField]
     private float _fireRate;
 
     private float _canFire = -1;
+
     [SerializeField]
     private int _lives = 3;
 
-    private SpawnMangerScript _spawnManagerScript;
+    private SpawnManagerScript _spawnManagerScript;
+
+    private bool _canTripleShot;
+    [SerializeField]
+    private float _tripleShotDuration;
 
     void Start()
     {
-        _spawnManagerScript = GameObject.Find("Spawn_Manager").GetComponent<SpawnMangerScript>();
-        if(_spawnManagerScript == null)
+        _spawnManagerScript =
+            GameObject.Find("Spawn_Manager").GetComponent<SpawnManagerScript>();
+        if (_spawnManagerScript == null)
         {
             Debug.LogError("Spawn Manager is Null");
         }
@@ -100,16 +109,35 @@ public class PlayerScript : MonoBehaviour
             new Vector3(transform.position.x,
                 transform.position.y + _laserOffsetY,
                 transform.position.z);
-        Instantiate(_laserPrefab, laserStartPos, Quaternion.identity);
+        if (_canTripleShot)
+        {
+            Instantiate(_tripleShotPrefab, laserStartPos, Quaternion.identity);
+        }
+        else
+        {
+            Instantiate(_laserPrefab, laserStartPos, Quaternion.identity);
+        }
     }
 
     public void Damage()
     {
         _lives--;
-        if(_lives < 1)
+        if (_lives < 1)
         {
             Destroy(transform.gameObject);
             _spawnManagerScript.OnPlayerDeath();
         }
+    }
+
+    public void TurnOnTripleShot()
+    {
+        _canTripleShot = true;
+        StartCoroutine(DecayTripleShotTime());
+    }
+
+    IEnumerator DecayTripleShotTime()
+    {
+        yield return new WaitForSeconds(_tripleShotDuration);
+        _canTripleShot = false;
     }
 }
