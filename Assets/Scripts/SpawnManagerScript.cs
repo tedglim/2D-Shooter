@@ -5,13 +5,13 @@ using UnityEngine;
 public class SpawnManagerScript : MonoBehaviour
 {
     [SerializeField]
-    private GameObject _enemy;
-    [SerializeField]
-    private GameObject _tripleShot;
-    [SerializeField]
     private GameObject _enemyContainer;
     [SerializeField]
+    private GameObject _enemy;
+    [SerializeField]
     private GameObject _powerupContainer;
+    [SerializeField]
+    private GameObject[] _powerups;
     [SerializeField]
     private float _xMinBound;
     [SerializeField]
@@ -25,14 +25,13 @@ public class SpawnManagerScript : MonoBehaviour
     [SerializeField]
     private float _powerupSpawnRateMax;
     private bool _stopEnemySpawning = false;
-    private bool _stopTripleShotSpawning = false;
-
+    private bool _stopPowerupSpawn = false;
 
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnTripleShotRoutine());
+        StartCoroutine(SpawnPowerupRoutine());
     }
 
     // Update is called once per frame
@@ -51,13 +50,14 @@ public class SpawnManagerScript : MonoBehaviour
         }
     }
 
-    IEnumerator SpawnTripleShotRoutine()
+    IEnumerator SpawnPowerupRoutine()
     {
-        while(!_stopTripleShotSpawning)
+        while(!_stopPowerupSpawn)
         {
-            Vector3 spawnPos = new Vector3(Random.Range(_xMinBound, _xMaxBound), _yHeight, 0);
-            GameObject newTripleShot = Instantiate(_tripleShot, spawnPos, Quaternion.identity);
-            newTripleShot.transform.parent = _powerupContainer.transform;
+            Vector3 spawnPos = new Vector3 (Random.Range(_xMinBound, _xMaxBound), _yHeight, 0);
+            int rand = Random.Range(0, _powerups.Length);
+            GameObject newPowerup = Instantiate(_powerups[rand], spawnPos, Quaternion.identity);
+            newPowerup.transform.parent = _powerupContainer.transform;
             yield return new WaitForSeconds(Random.Range(_powerupSpawnRateMin, _powerupSpawnRateMax));
         }
     }
@@ -65,5 +65,6 @@ public class SpawnManagerScript : MonoBehaviour
     public void OnPlayerDeath()
     {
         _stopEnemySpawning = true;
+        _stopPowerupSpawn = true;
     }
 }

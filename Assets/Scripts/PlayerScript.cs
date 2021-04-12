@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+    private float _initSpeed;
     [SerializeField]
     private float _speed;
-
+    [SerializeField]
+    private float _boostedSpeed;
     [SerializeField]
     private float _upBoundX;
 
@@ -40,7 +42,9 @@ public class PlayerScript : MonoBehaviour
 
     private bool _canTripleShot;
     [SerializeField]
-    private float _tripleShotDuration;
+    private float _boostDuration;
+    private bool _isShieldActive;
+    private Transform _shieldVFX;
 
     void Start()
     {
@@ -50,6 +54,8 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.LogError("Spawn Manager is Null");
         }
+        _shieldVFX = this.transform.GetChild(0);
+        _shieldVFX.gameObject.SetActive(false);
     }
 
     void Update()
@@ -121,6 +127,13 @@ public class PlayerScript : MonoBehaviour
 
     public void Damage()
     {
+        if(_isShieldActive)
+        {
+            _isShieldActive = false;
+            _shieldVFX.gameObject.SetActive(false);
+            return;
+        }
+
         _lives--;
         if (_lives < 1)
         {
@@ -137,7 +150,27 @@ public class PlayerScript : MonoBehaviour
 
     IEnumerator DecayTripleShotTime()
     {
-        yield return new WaitForSeconds(_tripleShotDuration);
+        yield return new WaitForSeconds(_boostDuration);
         _canTripleShot = false;
     }
+
+    public void RaiseSpeed()
+    {
+        _initSpeed = _speed;
+        _speed = _boostedSpeed;
+        StartCoroutine(DecaySpeedBoostTime());
+    }
+
+    IEnumerator DecaySpeedBoostTime()
+    {
+        yield return new WaitForSeconds(_boostDuration);
+        _speed = _initSpeed;
+    }
+
+    public void TurnOnShields()
+    {
+        _isShieldActive = true;
+        _shieldVFX.gameObject.SetActive(true);
+    }
+
 }

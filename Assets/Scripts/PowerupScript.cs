@@ -10,6 +10,9 @@ public class PowerupScript : MonoBehaviour
     [SerializeField]
     private float _yMin;
 
+    [SerializeField] //0 - triple, 1 - speed, 2 - shield
+    private int powerupID;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +32,22 @@ public class PowerupScript : MonoBehaviour
             PlayerScript player = other.gameObject.GetComponent<PlayerScript>();
             if (player != null)
             {
-                player.TurnOnTripleShot();
+                switch(powerupID)
+                {
+                    default:
+                        Debug.Log("none");
+                        break;
+                    case 0:
+                        player.TurnOnTripleShot();
+                        break;
+                    case 1:
+                        player.RaiseSpeed();
+                        break;
+                    case 2:
+                        player.TurnOnShields();
+                        break;
+
+                }
             }
             Destroy(transform.gameObject);
         }
