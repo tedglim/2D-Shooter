@@ -30,6 +30,11 @@ public class SpawnManagerScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+    }
+
+    public void StartSpawning()
+    {
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
     }
@@ -41,6 +46,7 @@ public class SpawnManagerScript : MonoBehaviour
 
     IEnumerator SpawnEnemyRoutine()
     {
+        yield return new WaitForSeconds(2.0f);
         while (!_stopEnemySpawning)
         {
             Vector3 spawnPos = new Vector3(Random.Range(_xMinBound, _xMaxBound), _yHeight, 0);
@@ -52,6 +58,7 @@ public class SpawnManagerScript : MonoBehaviour
 
     IEnumerator SpawnPowerupRoutine()
     {
+        yield return new WaitForSeconds(2.0f);
         while(!_stopPowerupSpawn)
         {
             Vector3 spawnPos = new Vector3 (Random.Range(_xMinBound, _xMaxBound), _yHeight, 0);

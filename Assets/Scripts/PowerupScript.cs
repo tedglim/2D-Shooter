@@ -35,7 +35,7 @@ public class PowerupScript : MonoBehaviour
                 switch(powerupID)
                 {
                     default:
-                        Debug.Log("none");
+                        Debug.Log("Default");
                         break;
                     case 0:
                         player.TurnOnTripleShot();

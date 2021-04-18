@@ -45,6 +45,10 @@ public class PlayerScript : MonoBehaviour
     private float _boostDuration;
     private bool _isShieldActive;
     private Transform _shieldVFX;
+    private int _score = 0;
+    private UIManagerScript _uiManagerScript;
+    [SerializeField]
+    private GameObject _leftEnginePrefab, _rightEnginePrefab;
 
     void Start()
     {
@@ -54,6 +58,7 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.LogError("Spawn Manager is Null");
         }
+        _uiManagerScript = GameObject.Find("UI_Manager").GetComponent<UIManagerScript>();
         _shieldVFX = this.transform.GetChild(0);
         _shieldVFX.gameObject.SetActive(false);
     }
@@ -135,10 +140,20 @@ public class PlayerScript : MonoBehaviour
         }
 
         _lives--;
+        _uiManagerScript.UpdateLivesImg(_lives);
+        if(_lives == 2)
+        {
+            _rightEnginePrefab.SetActive(true);
+        }
+        if(_lives == 1)
+        {
+            _leftEnginePrefab.SetActive(true);
+        }
         if (_lives < 1)
         {
             Destroy(transform.gameObject);
             _spawnManagerScript.OnPlayerDeath();
+            _uiManagerScript.DisplayGameOver();
         }
     }
 
@@ -171,6 +186,12 @@ public class PlayerScript : MonoBehaviour
     {
         _isShieldActive = true;
         _shieldVFX.gameObject.SetActive(true);
+    }
+
+    public void AddToScore(int points)
+    {
+        _score += points;
+        _uiManagerScript.UpdateScoreText(_score);
     }
 
 }
