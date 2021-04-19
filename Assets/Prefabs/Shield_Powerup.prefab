@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3
   _yMin: -5
+  _powerupClip: {fileID: 8300000, guid: 5ee343246919d2b4bba63ae629e95494, type: 3}
   powerupID: 2
 --- !u!50 &2662338069543230882
 Rigidbody2D:

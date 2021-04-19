@@ -23,16 +23,37 @@ public class EnemyScript : MonoBehaviour
     private int _pointValue;
 
     private PlayerScript _player;
+
     private Animator _animator;
 
-    // Start is called before the first frame update
+    private AudioSource _audioSource;
+
+    [SerializeField]
+    private AudioClip _explosionClip;
+
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
         _animator = transform.GetComponent<Animator>();
+        _audioSource = transform.GetComponent<AudioSource>();
+        if (_player == null)
+        {
+            Debug.LogError("Player is null");
+        }
+        if (_animator == null)
+        {
+            Debug.LogError("Animator is null");
+        }
+        if (_audioSource == null)
+        {
+            Debug.LogError("AudioSource is Null");
+        }
+        else
+        {
+            _audioSource.clip = _explosionClip;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -55,6 +76,7 @@ public class EnemyScript : MonoBehaviour
             }
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0f;
+            _audioSource.Play();
             Destroy(transform.gameObject, 1f);
         }
         else if (other.tag == "Laser")
@@ -66,6 +88,7 @@ public class EnemyScript : MonoBehaviour
             }
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0f;
+            _audioSource.Play();
             Destroy(transform.gameObject, 1f);
         }
     }

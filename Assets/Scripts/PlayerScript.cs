@@ -5,10 +5,13 @@ using UnityEngine;
 public class PlayerScript : MonoBehaviour
 {
     private float _initSpeed;
+
     [SerializeField]
     private float _speed;
+
     [SerializeField]
     private float _boostedSpeed;
+
     [SerializeField]
     private float _upBoundX;
 
@@ -41,26 +44,55 @@ public class PlayerScript : MonoBehaviour
     private SpawnManagerScript _spawnManagerScript;
 
     private bool _canTripleShot;
+
     [SerializeField]
     private float _boostDuration;
+
     private bool _isShieldActive;
-    private Transform _shieldVFX;
-    private int _score = 0;
-    private UIManagerScript _uiManagerScript;
     [SerializeField]
-    private GameObject _leftEnginePrefab, _rightEnginePrefab;
+
+    private Transform _shieldVFX;
+
+    private int _score = 0;
+
+    private UIManagerScript _uiManagerScript;
+
+    [SerializeField]
+    private GameObject
+
+            _leftEnginePrefab,
+            _rightEnginePrefab;
+
+    [SerializeField]
+    private AudioClip _laserClip;
+    [SerializeField]
+    private AudioClip _explosionClip;
+
+    private AudioSource _audioSource;
 
     void Start()
     {
         _spawnManagerScript =
             GameObject.Find("Spawn_Manager").GetComponent<SpawnManagerScript>();
+        _uiManagerScript =
+            GameObject.Find("UI_Manager").GetComponent<UIManagerScript>();
+        _audioSource = transform.GetComponent<AudioSource>();
         if (_spawnManagerScript == null)
         {
-            Debug.LogError("Spawn Manager is Null");
+            Debug.LogError("Spawn Manager is null");
         }
-        _uiManagerScript = GameObject.Find("UI_Manager").GetComponent<UIManagerScript>();
-        _shieldVFX = this.transform.GetChild(0);
-        _shieldVFX.gameObject.SetActive(false);
+        if (_uiManagerScript == null)
+        {
+            Debug.LogError("UIManager is null");
+        }
+        if (_audioSource == null)
+        {
+            Debug.LogError("AudioSource is null");
+        }
+        else
+        {
+            _audioSource.clip = _laserClip;
+        }
     }
 
     void Update()
@@ -128,11 +160,13 @@ public class PlayerScript : MonoBehaviour
         {
             Instantiate(_laserPrefab, laserStartPos, Quaternion.identity);
         }
+        _audioSource.clip = _laserClip;
+        _audioSource.Play();
     }
 
     public void Damage()
     {
-        if(_isShieldActive)
+        if (_isShieldActive)
         {
             _isShieldActive = false;
             _shieldVFX.gameObject.SetActive(false);
@@ -140,12 +174,15 @@ public class PlayerScript : MonoBehaviour
         }
 
         _lives--;
-        _uiManagerScript.UpdateLivesImg(_lives);
-        if(_lives == 2)
+        _uiManagerScript.UpdateLivesImg (_lives);
+        _audioSource.clip = _explosionClip;
+        _audioSource.Play();
+        
+        if (_lives == 2)
         {
             _rightEnginePrefab.SetActive(true);
         }
-        if(_lives == 1)
+        if (_lives == 1)
         {
             _leftEnginePrefab.SetActive(true);
         }
@@ -191,7 +228,6 @@ public class PlayerScript : MonoBehaviour
     public void AddToScore(int points)
     {
         _score += points;
-        _uiManagerScript.UpdateScoreText(_score);
+        _uiManagerScript.UpdateScoreText (_score);
     }
-
 }

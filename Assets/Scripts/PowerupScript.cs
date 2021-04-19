@@ -10,15 +10,12 @@ public class PowerupScript : MonoBehaviour
     [SerializeField]
     private float _yMin;
 
+    [SerializeField]
+    private AudioClip _powerupClip;
+
     [SerializeField] //0 - triple, 1 - speed, 2 - shield
     private int powerupID;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -32,7 +29,8 @@ public class PowerupScript : MonoBehaviour
             PlayerScript player = other.gameObject.GetComponent<PlayerScript>();
             if (player != null)
             {
-                switch(powerupID)
+                AudioSource.PlayClipAtPoint(_powerupClip, transform.position);
+                switch (powerupID)
                 {
                     default:
                         Debug.Log("Default");
@@ -46,7 +44,6 @@ public class PowerupScript : MonoBehaviour
                     case 2:
                         player.TurnOnShields();
                         break;
-
                 }
             }
             Destroy(transform.gameObject);

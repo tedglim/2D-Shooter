@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class UIManagerScript : MonoBehaviour
 {
@@ -18,12 +17,14 @@ public class UIManagerScript : MonoBehaviour
 
     [SerializeField]
     private Text _gameOverText;
+
     [SerializeField]
     private Text _restartText;
+
     private int _lives;
+
     private GameManagerScript _gameManager;
 
-    // Start is called before the first frame update
     void Start()
     {
         _scoreText.text = "Score: 0";
@@ -31,14 +32,8 @@ public class UIManagerScript : MonoBehaviour
         _gameOverText.gameObject.SetActive(false);
         _restartText.gameObject.SetActive(false);
         _lives = _livesSprites.Length - 1;
-        _gameManager = GameObject.Find("GameManager").GetComponent<GameManagerScript>();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        _gameManager =
+            GameObject.Find("GameManager").GetComponent<GameManagerScript>();
     }
 
     public void UpdateScoreText(int score)
