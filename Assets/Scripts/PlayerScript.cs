@@ -44,6 +44,8 @@ public class PlayerScript : MonoBehaviour
     private SpawnManagerScript _spawnManagerScript;
 
     private bool _canTripleShot;
+    [SerializeField]
+    private Vector3 _tripleShotOffset;
 
     [SerializeField]
     private float _boostDuration;
@@ -154,7 +156,7 @@ public class PlayerScript : MonoBehaviour
                 transform.position.z);
         if (_canTripleShot)
         {
-            Instantiate(_tripleShotPrefab, laserStartPos, Quaternion.identity);
+            Instantiate(_tripleShotPrefab, laserStartPos + _tripleShotOffset, Quaternion.identity);
         }
         else
         {

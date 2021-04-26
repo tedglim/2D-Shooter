@@ -31,6 +31,24 @@ public class EnemyScript : MonoBehaviour
     [SerializeField]
     private AudioClip _explosionClip;
 
+    [SerializeField]
+    private float _nextLaserHigh;
+
+    [SerializeField]
+    private float _nextLaserLow;
+
+    public float _currTime;
+
+    public float _nextFire;
+
+    private bool _canFire;
+
+    [SerializeField]
+    private GameObject _laser;
+
+    [SerializeField]
+    private Vector3 _laserOffsetY;
+
     void Start()
     {
         _player = GameObject.Find("Player").GetComponent<PlayerScript>();
@@ -52,9 +70,17 @@ public class EnemyScript : MonoBehaviour
         {
             _audioSource.clip = _explosionClip;
         }
+        _nextFire = Time.time + Random.Range(_nextLaserLow, _nextLaserHigh);
+        _canFire = true;
     }
 
     void Update()
+    {
+        CalculateMovement();
+        ShootLaser();
+    }
+
+    private void CalculateMovement()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
         if (transform.position.y < _minYScreenHeight)
@@ -65,10 +91,22 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
+    private void ShootLaser()
+    {
+        if (_canFire && Time.time > _nextFire)
+        {
+            _nextFire += Random.Range(_nextLaserLow, _nextLaserHigh);
+            Instantiate(_laser,
+            transform.position + _laserOffsetY,
+            Quaternion.Euler(0, 0, 180));
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
         {
+            _canFire = false;
             PlayerScript player = other.transform.GetComponent<PlayerScript>();
             if (player != null)
             {
@@ -81,6 +119,7 @@ public class EnemyScript : MonoBehaviour
         }
         else if (other.tag == "Laser")
         {
+            _canFire = false;
             Destroy(other.transform.gameObject);
             if (_player != null)
             {
@@ -89,6 +128,7 @@ public class EnemyScript : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0f;
             _audioSource.Play();
+            Destroy(GetComponent<Collider2D>());
             Destroy(transform.gameObject, 1f);
         }
     }

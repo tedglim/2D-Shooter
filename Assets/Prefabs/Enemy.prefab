@@ -48,13 +48,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06987588f53aa463d8f121eaf6f618b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 4
+  _speed: 3
   _minXScreenWidth: -10
   _maxXScreenWidth: 10
   _minYScreenHeight: -7
   _maxYScreenHeight: 7
   _pointValue: 10
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
+  _nextLaserHigh: 2
+  _nextLaserLow: 1
+  _currTime: 0
+  _nextFire: 0
+  _laser: {fileID: 1089434478465980373, guid: 457ff8304ad5949bbaa2cc030c787093, type: 3}
+  _laserOffsetY: {x: 0, y: -3, z: 0}
 --- !u!212 &2300115493919424855
 SpriteRenderer:
   m_ObjectHideFlags: 0
