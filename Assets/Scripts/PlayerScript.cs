@@ -72,6 +72,8 @@ public class PlayerScript : MonoBehaviour
 
     private AudioSource _audioSource;
 
+    private CameraShakeScript _cameraShake;
+
     void Start()
     {
         _spawnManagerScript =
@@ -79,6 +81,7 @@ public class PlayerScript : MonoBehaviour
         _uiManagerScript =
             GameObject.Find("UI_Manager").GetComponent<UIManagerScript>();
         _audioSource = transform.GetComponent<AudioSource>();
+        _cameraShake = GameObject.Find("Shake").GetComponent<CameraShakeScript>();
         if (_spawnManagerScript == null)
         {
             Debug.LogError("Spawn Manager is null");
@@ -94,6 +97,10 @@ public class PlayerScript : MonoBehaviour
         else
         {
             _audioSource.clip = _laserClip;
+        }
+        if(_cameraShake == null)
+        {
+            Debug.LogError("CameraShake is null");
         }
     }
 
@@ -176,6 +183,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         _lives--;
+        _cameraShake.Shake(_lives);
         _uiManagerScript.UpdateLivesImg (_lives);
         _audioSource.clip = _explosionClip;
         _audioSource.Play();

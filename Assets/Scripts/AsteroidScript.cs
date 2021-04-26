@@ -36,6 +36,7 @@ public class AsteroidScript : MonoBehaviour
                 transform.position,
                 Quaternion.identity);
             Destroy(other.gameObject);
+            Destroy(GetComponent<Collider2D>());
             _spawnManager.StartSpawning();
             Destroy(transform.gameObject, .5f);
         }
