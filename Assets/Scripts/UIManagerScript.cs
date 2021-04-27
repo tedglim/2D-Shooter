@@ -21,6 +21,15 @@ public class UIManagerScript : MonoBehaviour
     [SerializeField]
     private Text _restartText;
 
+    [SerializeField]
+    private GameObject[] _shieldStrength;
+
+    [SerializeField]
+    private Color _shieldColorOff;
+
+    [SerializeField]
+    private Color _shieldColorOn;
+
     private int _lives;
 
     private GameManagerScript _gameManager;
@@ -45,6 +54,22 @@ public class UIManagerScript : MonoBehaviour
     {
         _livesImg.sprite = _livesSprites[lives];
         _lives = lives;
+    }
+
+    public void UpdateShield(int shieldLives)
+    {
+        if (shieldLives == 3)
+        {
+            for (int i = 0; i < _shieldStrength.Length; i++)
+            {
+                _shieldStrength[i].GetComponent<Image>().color = _shieldColorOn;
+            }
+        }
+        else
+        {
+            _shieldStrength[shieldLives].GetComponent<Image>().color =
+                _shieldColorOff;
+        }
     }
 
     public void DisplayGameOver()

@@ -12,6 +12,8 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private float _boostedSpeed;
 
+    private bool _speedBoostOn;
+
     [SerializeField]
     private float _upBoundX;
 
@@ -44,6 +46,7 @@ public class PlayerScript : MonoBehaviour
     private SpawnManagerScript _spawnManagerScript;
 
     private bool _canTripleShot;
+
     [SerializeField]
     private Vector3 _tripleShotOffset;
 
@@ -51,9 +54,11 @@ public class PlayerScript : MonoBehaviour
     private float _boostDuration;
 
     private bool _isShieldActive;
-    [SerializeField]
 
+    [SerializeField]
     private Transform _shieldVFX;
+
+    private int _shieldLives = 3;
 
     private int _score = 0;
 
@@ -67,6 +72,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private AudioClip _laserClip;
+
     [SerializeField]
     private AudioClip _explosionClip;
 
@@ -81,7 +87,8 @@ public class PlayerScript : MonoBehaviour
         _uiManagerScript =
             GameObject.Find("UI_Manager").GetComponent<UIManagerScript>();
         _audioSource = transform.GetComponent<AudioSource>();
-        _cameraShake = GameObject.Find("Shake").GetComponent<CameraShakeScript>();
+        _cameraShake =
+            GameObject.Find("Shake").GetComponent<CameraShakeScript>();
         if (_spawnManagerScript == null)
         {
             Debug.LogError("Spawn Manager is null");
@@ -98,7 +105,7 @@ public class PlayerScript : MonoBehaviour
         {
             _audioSource.clip = _laserClip;
         }
-        if(_cameraShake == null)
+        if (_cameraShake == null)
         {
             Debug.LogError("CameraShake is null");
         }
@@ -111,13 +118,14 @@ public class PlayerScript : MonoBehaviour
         {
             FireLaser();
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_speedBoostOn)
         {
-            Debug.Log("Thrusters on");
+            // Debug.Log("Thrusters on");
             ActivateThrusters();
-        } else if (Input.GetKeyUp(KeyCode.LeftShift))
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift) && !_speedBoostOn)
         {
-            Debug.Log("Thrusters off");
+            // Debug.Log("Thrusters off");
             DeactivateThrusters();
         }
     }
@@ -172,7 +180,9 @@ public class PlayerScript : MonoBehaviour
                 transform.position.z);
         if (_canTripleShot)
         {
-            Instantiate(_tripleShotPrefab, laserStartPos + _tripleShotOffset, Quaternion.identity);
+            Instantiate(_tripleShotPrefab,
+            laserStartPos + _tripleShotOffset,
+            Quaternion.identity);
         }
         else
         {
@@ -195,19 +205,25 @@ public class PlayerScript : MonoBehaviour
 
     public void Damage()
     {
+        if (_lives == 0) return;
         if (_isShieldActive)
         {
-            _isShieldActive = false;
-            _shieldVFX.gameObject.SetActive(false);
+            _shieldLives--;
+            _uiManagerScript.UpdateShield (_shieldLives);
+            if (_shieldLives == 0)
+            {
+                _isShieldActive = false;
+                _shieldVFX.gameObject.SetActive(false);
+            }
             return;
         }
 
         _lives--;
-        _cameraShake.Shake(_lives);
+        _cameraShake.Shake (_lives);
         _uiManagerScript.UpdateLivesImg (_lives);
         _audioSource.clip = _explosionClip;
         _audioSource.Play();
-        
+
         if (_lives == 2)
         {
             _rightEnginePrefab.SetActive(true);
@@ -238,6 +254,7 @@ public class PlayerScript : MonoBehaviour
 
     public void RaiseSpeed()
     {
+        _speedBoostOn = true;
         _initSpeed = _speed;
         _speed = _boostedSpeed;
         StartCoroutine(DecaySpeedBoostTime());
@@ -247,12 +264,15 @@ public class PlayerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(_boostDuration);
         _speed = _initSpeed;
+        _speedBoostOn = false;
     }
 
     public void TurnOnShields()
     {
         _isShieldActive = true;
         _shieldVFX.gameObject.SetActive(true);
+        _shieldLives = 3;
+        _uiManagerScript.UpdateShield (_shieldLives);
     }
 
     public void AddToScore(int points)
