@@ -111,6 +111,15 @@ public class PlayerScript : MonoBehaviour
         {
             FireLaser();
         }
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Debug.Log("Thrusters on");
+            ActivateThrusters();
+        } else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            Debug.Log("Thrusters off");
+            DeactivateThrusters();
+        }
     }
 
     private void MovePlayer()
@@ -171,6 +180,17 @@ public class PlayerScript : MonoBehaviour
         }
         _audioSource.clip = _laserClip;
         _audioSource.Play();
+    }
+
+    private void ActivateThrusters()
+    {
+        _initSpeed = _speed;
+        _speed = _boostedSpeed;
+    }
+
+    private void DeactivateThrusters()
+    {
+        _speed = _initSpeed;
     }
 
     public void Damage()
