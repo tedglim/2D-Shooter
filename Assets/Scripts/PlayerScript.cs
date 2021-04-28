@@ -280,4 +280,13 @@ public class PlayerScript : MonoBehaviour
         _score += points;
         _uiManagerScript.UpdateScoreText (_score);
     }
+
+    public void AddHealth()
+    {
+        if (_lives < 3)
+        {
+            _lives++;
+            _uiManagerScript.UpdateLivesImg (_lives);
+        }
+    }
 }

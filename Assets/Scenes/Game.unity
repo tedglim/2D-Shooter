@@ -2327,6 +2327,7 @@ MonoBehaviour:
   - {fileID: 1977850205017293659, guid: 59d54e4e01ce74f718221c658ed92aa1, type: 3}
   - {fileID: 239360855078691990, guid: d4692919c1b7849c085af2387e418588, type: 3}
   - {fileID: 2450220434692601244, guid: 478205cd2ce04443da82e19679cfb11c, type: 3}
+  - {fileID: 5964594688827909800, guid: b95a3840919254b31949d50e9bdff420, type: 3}
   _xMinBound: -9
   _xMaxBound: 9
   _yHeight: 7
