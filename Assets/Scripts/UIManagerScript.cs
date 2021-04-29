@@ -29,6 +29,8 @@ public class UIManagerScript : MonoBehaviour
 
     [SerializeField]
     private Color _shieldColorOn;
+    [SerializeField]
+    private Image _thrusterBar;
 
     private int _lives;
 
@@ -70,6 +72,11 @@ public class UIManagerScript : MonoBehaviour
             _shieldStrength[shieldLives].GetComponent<Image>().color =
                 _shieldColorOff;
         }
+    }
+
+    public void UpdateThrusters(float currThrusters, float totalThrusters)
+    {
+        _thrusterBar.fillAmount = currThrusters / totalThrusters;
     }
 
     public void DisplayGameOver()

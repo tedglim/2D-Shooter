@@ -15,6 +15,14 @@ public class PlayerScript : MonoBehaviour
     private bool _speedBoostOn;
 
     [SerializeField]
+    private float _totalThrusterTime;
+
+    private float _currentThrusterTime;
+
+    private bool _canThrusters;
+    private bool _canRefillThrusters;
+
+    [SerializeField]
     private float _upBoundX;
 
     [SerializeField]
@@ -109,6 +117,8 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.LogError("CameraShake is null");
         }
+        _currentThrusterTime = _totalThrusterTime;
+        _canThrusters = true;
     }
 
     void Update()
@@ -118,15 +128,23 @@ public class PlayerScript : MonoBehaviour
         {
             FireLaser();
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_speedBoostOn)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_speedBoostOn && _canThrusters)
         {
-            // Debug.Log("Thrusters on");
             ActivateThrusters();
+            _canRefillThrusters = false;
         }
         else if (Input.GetKeyUp(KeyCode.LeftShift) && !_speedBoostOn)
         {
-            // Debug.Log("Thrusters off");
             DeactivateThrusters();
+            _canRefillThrusters = true;
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && _canThrusters)
+        {
+            ConsumeThrusters();
+        }
+        if (_canRefillThrusters)
+        {
+            RefillThrusters();
         }
     }
 
@@ -158,14 +176,14 @@ public class PlayerScript : MonoBehaviour
         if (transform.position.x > _upBoundX)
         {
             transform.position =
-                new Vector3(-_upBoundX,
+                new Vector3(_lowBoundX,
                     transform.position.y,
                     transform.position.z);
         }
         else if (transform.position.x < _lowBoundX)
         {
             transform.position =
-                new Vector3(-_lowBoundX,
+                new Vector3(_upBoundX,
                     transform.position.y,
                     transform.position.z);
         }
@@ -201,6 +219,41 @@ public class PlayerScript : MonoBehaviour
     private void DeactivateThrusters()
     {
         _speed = _initSpeed;
+    }
+
+    private void ConsumeThrusters()
+    {
+        if (_currentThrusterTime <= 0f)
+        {
+            _canThrusters = false;
+            DeactivateThrusters();
+            _currentThrusterTime = 0f;
+        }
+        else
+        {
+            _currentThrusterTime -= Time.deltaTime;
+        }
+        _uiManagerScript.UpdateThrusters (
+            _currentThrusterTime,
+            _totalThrusterTime
+        );
+    }
+
+    private void RefillThrusters()
+    {
+        if (_currentThrusterTime >= _totalThrusterTime)
+        {
+            _currentThrusterTime = _totalThrusterTime;
+        }
+        else
+        {
+            _currentThrusterTime += Time.deltaTime;
+            _canThrusters = true;
+        }
+        _uiManagerScript.UpdateThrusters (
+            _currentThrusterTime,
+            _totalThrusterTime
+        );
     }
 
     public void Damage()
