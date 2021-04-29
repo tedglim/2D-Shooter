@@ -17,10 +17,12 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private float _totalThrusterTime;
 
-    private float _currentThrusterTime;
+    [SerializeField]
+    private float _thrusterCD;
 
-    private bool _canThrusters;
-    private bool _canRefillThrusters;
+    private float _canThrusters;
+
+    private float _currentThrusterTime;
 
     [SerializeField]
     private float _upBoundX;
@@ -117,8 +119,8 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.LogError("CameraShake is null");
         }
-        _currentThrusterTime = _totalThrusterTime;
-        _canThrusters = true;
+        _currentThrusterTime = _thrusterCD;
+        _canThrusters = -1;
     }
 
     void Update()
@@ -128,21 +130,11 @@ public class PlayerScript : MonoBehaviour
         {
             FireLaser();
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_speedBoostOn && _canThrusters)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && !_speedBoostOn && Time.time > _canThrusters)
         {
             ActivateThrusters();
-            _canRefillThrusters = false;
         }
-        else if (Input.GetKeyUp(KeyCode.LeftShift) && !_speedBoostOn)
-        {
-            DeactivateThrusters();
-            _canRefillThrusters = true;
-        }
-        if (Input.GetKey(KeyCode.LeftShift) && _canThrusters)
-        {
-            ConsumeThrusters();
-        }
-        if (_canRefillThrusters)
+        else
         {
             RefillThrusters();
         }
@@ -212,48 +204,31 @@ public class PlayerScript : MonoBehaviour
 
     private void ActivateThrusters()
     {
+        _canThrusters = Time.time + _thrusterCD;
         _initSpeed = _speed;
         _speed = _boostedSpeed;
+        _currentThrusterTime = 0f;
+        _uiManagerScript.UpdateThrusters (_currentThrusterTime, _thrusterCD);
+        StartCoroutine(DeactivateThrusters());
     }
 
-    private void DeactivateThrusters()
+    IEnumerator DeactivateThrusters()
     {
+        yield return new WaitForSeconds(_totalThrusterTime);
         _speed = _initSpeed;
-    }
-
-    private void ConsumeThrusters()
-    {
-        if (_currentThrusterTime <= 0f)
-        {
-            _canThrusters = false;
-            DeactivateThrusters();
-            _currentThrusterTime = 0f;
-        }
-        else
-        {
-            _currentThrusterTime -= Time.deltaTime;
-        }
-        _uiManagerScript.UpdateThrusters (
-            _currentThrusterTime,
-            _totalThrusterTime
-        );
     }
 
     private void RefillThrusters()
     {
-        if (_currentThrusterTime >= _totalThrusterTime)
+        if (_currentThrusterTime >= _thrusterCD)
         {
-            _currentThrusterTime = _totalThrusterTime;
+            _currentThrusterTime = _thrusterCD;
         }
         else
         {
             _currentThrusterTime += Time.deltaTime;
-            _canThrusters = true;
         }
-        _uiManagerScript.UpdateThrusters (
-            _currentThrusterTime,
-            _totalThrusterTime
-        );
+        _uiManagerScript.UpdateThrusters (_currentThrusterTime, _thrusterCD);
     }
 
     public void Damage()

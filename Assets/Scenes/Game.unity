@@ -710,6 +710,7 @@ MonoBehaviour:
   _speed: 7.5
   _boostedSpeed: 15
   _totalThrusterTime: 2
+  _thrusterCD: 4
   _upBoundX: 10
   _lowBoundX: -6
   _upBoundY: 3
