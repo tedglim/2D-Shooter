@@ -25,6 +25,11 @@ public class PlayerScript : MonoBehaviour
     private float _currentThrusterTime;
 
     [SerializeField]
+    private int _totalAmmo;
+
+    private int _currAmmo;
+
+    [SerializeField]
     private float _upBoundX;
 
     [SerializeField]
@@ -86,6 +91,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField]
     private AudioClip _explosionClip;
 
+    [SerializeField]
+    private AudioClip _outOfAmmoClip;
+
     private AudioSource _audioSource;
 
     private CameraShakeScript _cameraShake;
@@ -121,6 +129,8 @@ public class PlayerScript : MonoBehaviour
         }
         _currentThrusterTime = _thrusterCD;
         _canThrusters = -1;
+        _currAmmo = _totalAmmo;
+        _uiManagerScript.UpdateAmmoCount (_totalAmmo);
     }
 
     void Update()
@@ -130,7 +140,11 @@ public class PlayerScript : MonoBehaviour
         {
             FireLaser();
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && !_speedBoostOn && Time.time > _canThrusters)
+        if (
+            Input.GetKeyDown(KeyCode.LeftShift) &&
+            !_speedBoostOn &&
+            Time.time > _canThrusters
+        )
         {
             ActivateThrusters();
         }
@@ -183,6 +197,17 @@ public class PlayerScript : MonoBehaviour
 
     private void FireLaser()
     {
+        if (_currAmmo <= 0)
+        {
+            _audioSource.clip = _outOfAmmoClip;
+            _audioSource.Play();
+            return;
+        }
+        else
+        {
+            _currAmmo--;
+            _uiManagerScript.UpdateAmmoCount (_currAmmo);
+        }
         _canFire = Time.time + _fireRate;
         Vector3 laserStartPos =
             new Vector3(transform.position.x,
@@ -233,7 +258,6 @@ public class PlayerScript : MonoBehaviour
 
     public void Damage()
     {
-        if (_lives == 0) return;
         if (_isShieldActive)
         {
             _shieldLives--;
@@ -247,10 +271,13 @@ public class PlayerScript : MonoBehaviour
         }
 
         _lives--;
-        _cameraShake.Shake (_lives);
-        _uiManagerScript.UpdateLivesImg (_lives);
-        _audioSource.clip = _explosionClip;
-        _audioSource.Play();
+        _cameraShake.Shake();
+        if (_lives >= 0)
+        {
+            _uiManagerScript.UpdateLivesImg (_lives);
+            _audioSource.clip = _explosionClip;
+            _audioSource.Play();
+        }
 
         if (_lives == 2)
         {
@@ -316,5 +343,11 @@ public class PlayerScript : MonoBehaviour
             _lives++;
             _uiManagerScript.UpdateLivesImg (_lives);
         }
+    }
+
+    public void AddAmmo()
+    {
+        _currAmmo = _totalAmmo;
+        _uiManagerScript.UpdateAmmoCount (_currAmmo);
     }
 }

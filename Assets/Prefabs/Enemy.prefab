@@ -49,8 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 3
-  _minXScreenWidth: -10
-  _maxXScreenWidth: 10
+  _minXScreenWidth: -5
+  _maxXScreenWidth: 9
   _minYScreenHeight: -7
   _maxYScreenHeight: 7
   _pointValue: 10

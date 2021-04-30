@@ -31,6 +31,8 @@ public class UIManagerScript : MonoBehaviour
     private Color _shieldColorOn;
     [SerializeField]
     private Image _thrusterBar;
+    [SerializeField]
+    private Text _ammoCount;
 
     private int _lives;
 
@@ -77,6 +79,11 @@ public class UIManagerScript : MonoBehaviour
     public void UpdateThrusters(float currThrusters, float totalThrusters)
     {
         _thrusterBar.fillAmount = currThrusters / totalThrusters;
+    }
+
+    public void UpdateAmmoCount(int ammo)
+    {
+        _ammoCount.text = ammo.ToString();
     }
 
     public void DisplayGameOver()

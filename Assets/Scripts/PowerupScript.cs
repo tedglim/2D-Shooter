@@ -47,6 +47,9 @@ public class PowerupScript : MonoBehaviour
                     case 3:
                         player.AddHealth();
                         break;
+                    case 4:
+                        player.AddAmmo();
+                        break;
                 }
             }
             Destroy(transform.gameObject);

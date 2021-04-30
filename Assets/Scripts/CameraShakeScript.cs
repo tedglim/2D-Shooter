@@ -22,13 +22,13 @@ public class CameraShakeScript : MonoBehaviour
         _origPos = _camera.position;
     }
 
-    public void Shake(int lives)
+    public void Shake()
     {
         _source.GenerateImpulse();
-        StartCoroutine(Recenter(lives));
+        StartCoroutine(Recenter());
     }
 
-    IEnumerator Recenter(int lives)
+    IEnumerator Recenter()
     {
         yield return new WaitForSeconds(_shakeTime);
         _camera.transform.position = _origPos;
