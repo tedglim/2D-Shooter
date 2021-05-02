@@ -34,12 +34,24 @@ public class SpawnManagerScript : MonoBehaviour
     [SerializeField]
     private float _powerupSpawnRateMax = 8f;
 
+    [SerializeField]
+    private float _moddedMissileRate;
+
     private bool _stopEnemySpawning = false;
 
     private bool _stopPowerupSpawn = false;
 
+    private GameManagerScript _gameManager;
+
+    void Start()
+    {
+        _gameManager =
+            GameObject.Find("GameManager").GetComponent<GameManagerScript>();
+    }
+
     public void StartSpawning()
     {
+        _gameManager.GameStart();
         StartCoroutine(SpawnEnemyRoutine());
         StartCoroutine(SpawnPowerupRoutine());
     }
@@ -66,12 +78,27 @@ public class SpawnManagerScript : MonoBehaviour
             Vector3 spawnPos =
                 new Vector3(Random.Range(_xMinBound, _xMaxBound), _yHeight, 0);
             int rand = Random.Range(0, _powerups.Length);
+            rand = ReRollOnce(rand, _powerups[rand]);
             GameObject newPowerup =
                 Instantiate(_powerups[rand], spawnPos, Quaternion.identity);
             newPowerup.transform.parent = _powerupContainer.transform;
             yield return new WaitForSeconds(Random
                         .Range(_powerupSpawnRateMin, _powerupSpawnRateMax));
         }
+    }
+
+    //Higher modded missile rate more likely to reroll
+    private int ReRollOnce(int orig, GameObject powerup)
+    {
+        if (powerup.name == "Missile_Powerup")
+        {
+            int rand = Random.Range(0, 100);
+            if (rand <= _moddedMissileRate)
+            {
+                return Random.Range(0, _powerups.Length);
+            }
+        }
+        return orig;
     }
 
     public void OnPlayerDeath()

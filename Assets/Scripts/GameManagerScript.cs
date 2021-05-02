@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManagerScript : MonoBehaviour
 {
-    [SerializeField]
-    private bool isGameOver;
+    public bool isGameOver;
+    public bool hasGameStarted;
 
     void Update()
     {
@@ -20,8 +20,13 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
-    public void GameOVer()
+    public void GameOver()
     {
         isGameOver = true;
+    }
+
+    public void GameStart()
+    {
+        hasGameStarted = true;
     }
 }

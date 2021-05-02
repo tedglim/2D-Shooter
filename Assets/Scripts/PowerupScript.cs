@@ -13,7 +13,7 @@ public class PowerupScript : MonoBehaviour
     [SerializeField]
     private AudioClip _powerupClip;
 
-    [SerializeField] //0 - triple, 1 - speed, 2 - shield
+    [SerializeField] //0 - triple, 1 - speed, 2 - shield, 3 - health, 4 - ammo, 5 - missile
     private int powerupID;
 
     void Update()
@@ -49,6 +49,9 @@ public class PowerupScript : MonoBehaviour
                         break;
                     case 4:
                         player.AddAmmo();
+                        break;
+                    case 5:
+                        player.TurnOnMissileShot();
                         break;
                 }
             }

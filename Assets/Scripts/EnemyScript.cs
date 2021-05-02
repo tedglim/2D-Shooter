@@ -115,12 +115,25 @@ public class EnemyScript : MonoBehaviour
             _animator.SetTrigger("OnEnemyDeath");
             _speed = 0f;
             _audioSource.Play();
+            Destroy(GetComponent<Collider2D>());
             Destroy(transform.gameObject, 1f);
         }
         else if (other.tag == "Laser")
         {
             _canFire = false;
             Destroy(other.transform.gameObject);
+            if (_player != null)
+            {
+                _player.AddToScore (_pointValue);
+            }
+            _animator.SetTrigger("OnEnemyDeath");
+            _speed = 0f;
+            _audioSource.Play();
+            Destroy(GetComponent<Collider2D>());
+            Destroy(transform.gameObject, 1f);
+        } else if (other.tag == "Missile")
+        {
+            _canFire = false;
             if (_player != null)
             {
                 _player.AddToScore (_pointValue);

@@ -55,8 +55,8 @@ MonoBehaviour:
   _maxYScreenHeight: 7
   _pointValue: 10
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
-  _nextLaserHigh: 2
-  _nextLaserLow: 1
+  _nextLaserHigh: 4
+  _nextLaserLow: 2
   _currTime: 0
   _nextFire: 0
   _laser: {fileID: 1089434478465980373, guid: 457ff8304ad5949bbaa2cc030c787093, type: 3}

@@ -51,7 +51,10 @@ public class UIManagerScript : MonoBehaviour
 
     public void UpdateScoreText(int score)
     {
-        _scoreText.text = "Score: " + score.ToString();
+        if(!_gameManager.isGameOver)
+        {
+            _scoreText.text = "Score: " + score.ToString();
+        }
     }
 
     public void UpdateLivesImg(int lives)
@@ -88,7 +91,7 @@ public class UIManagerScript : MonoBehaviour
 
     public void DisplayGameOver()
     {
-        _gameManager.GameOVer();
+        _gameManager.GameOver();
         _gameOverText.gameObject.SetActive(true);
         _restartText.gameObject.SetActive(true);
         StartCoroutine(Flicker());

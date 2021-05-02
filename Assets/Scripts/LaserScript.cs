@@ -58,7 +58,7 @@ public class LaserScript : MonoBehaviour
                 _audioSource.Play();
                 player.Damage();
             }
-            Destroy(this.gameObject);
+            Destroy(transform.gameObject);
         }
     }
 }

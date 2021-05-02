@@ -339,7 +339,7 @@ PrefabInstance:
     - target: {fileID: 6399977323606147925, guid: c5ecc96476ca44f5a8e4b6cbb8688f40,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6399977323606147925, guid: c5ecc96476ca44f5a8e4b6cbb8688f40,
         type: 3}
@@ -427,7 +427,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &273784206
 MonoBehaviour:
@@ -442,6 +442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isGameOver: 0
+  hasGameStarted: 0
 --- !u!1 &359023109
 GameObject:
   m_ObjectHideFlags: 0
@@ -718,6 +719,8 @@ MonoBehaviour:
   _lowBoundY: -4
   _laserPrefab: {fileID: 4518857875098362121, guid: 99a3bde899ad644abac1bf7cd9739291,
     type: 3}
+  _missilePrefab: {fileID: 8071987603826860261, guid: b90acb89506bf4665aa9b95ea313a528,
+    type: 3}
   _tripleShotPrefab: {fileID: 3761474902508495608, guid: 91b473f8191c94dd3824815062d67d6b,
     type: 3}
   _laserOffsetY: 1
@@ -726,11 +729,14 @@ MonoBehaviour:
   _tripleShotOffset: {x: 0, y: -1, z: 0}
   _boostDuration: 5
   _shieldVFX: {fileID: 7400287956573413795}
+  _missileShotDuration: 5
+  _missileShotRate: 1
   _leftEnginePrefab: {fileID: 2129238628}
   _rightEnginePrefab: {fileID: 981213945}
   _laserClip: {fileID: 8300000, guid: 75676f361bdfeaf41a46623e95df3dbc, type: 3}
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _outOfAmmoClip: {fileID: 8300000, guid: a8d0bb6cc35c24c03a2267bebec95cc5, type: 3}
+  _missileClip: {fileID: 8300000, guid: 3ccf94061e47c481b861c809d4c05fed, type: 3}
 --- !u!212 &492538483
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2811,12 +2817,14 @@ MonoBehaviour:
   - {fileID: 2450220434692601244, guid: 478205cd2ce04443da82e19679cfb11c, type: 3}
   - {fileID: 5964594688827909800, guid: b95a3840919254b31949d50e9bdff420, type: 3}
   - {fileID: 4186585153265318282, guid: 2480cf88ae38e4f1c8b0ddedeec8af17, type: 3}
+  - {fileID: 991857889173541252, guid: b44408aafd0904631b6c4929c41587d9, type: 3}
   _xMinBound: -5
   _xMaxBound: 9
   _yHeight: 7
   _enemySpawnRateSecs: 2
-  _powerupSpawnRateMin: 6
-  _powerupSpawnRateMax: 8
+  _powerupSpawnRateMin: 3
+  _powerupSpawnRateMax: 5
+  _moddedMissileRate: 50
 --- !u!4 &2007282263
 Transform:
   m_ObjectHideFlags: 0
