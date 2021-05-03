@@ -166,14 +166,18 @@ public class PlayerScript : MonoBehaviour
             FireLaser();
         }
         if (
-            Input.GetKeyDown(KeyCode.LeftShift) &&
+            Input.GetKey(KeyCode.LeftShift) &&
             !_speedBoostOn &&
             Time.time > _canThrusters
         )
         {
-            ActivateThrusters();
+            BurnThrusters();
         }
-        else
+        else if(Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _speed = _initSpeed;
+            _canThrusters = Time.time + _thrusterCD;
+        } else if(Time.time > _canThrusters)
         {
             RefillThrusters();
         }
@@ -260,20 +264,20 @@ public class PlayerScript : MonoBehaviour
         _audioSource.Play();
     }
 
-    private void ActivateThrusters()
+    private void BurnThrusters()
     {
-        _canThrusters = Time.time + _thrusterCD;
-        _initSpeed = _speed;
+        if(_speed != _boostedSpeed)
+        {
+            _initSpeed = _speed;
+        }
         _speed = _boostedSpeed;
-        _currentThrusterTime = 0f;
+        _currentThrusterTime -= Time.deltaTime;
+        if(_currentThrusterTime <= 0)
+        {
+            _currentThrusterTime = 0;
+            _speed = _initSpeed;
+        }
         _uiManagerScript.UpdateThrusters (_currentThrusterTime, _thrusterCD);
-        StartCoroutine(DeactivateThrusters());
-    }
-
-    IEnumerator DeactivateThrusters()
-    {
-        yield return new WaitForSeconds(_totalThrusterTime);
-        _speed = _initSpeed;
     }
 
     private void RefillThrusters()
