@@ -43,6 +43,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private GameObject _laserPrefab;
+
     [SerializeField]
     private GameObject _missilePrefab;
 
@@ -84,6 +85,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private float _missileShotRate;
+
     private float _nextMissile = -1;
 
     private int _score = 0;
@@ -104,6 +106,7 @@ public class PlayerScript : MonoBehaviour
 
     [SerializeField]
     private AudioClip _outOfAmmoClip;
+
     [SerializeField]
     private AudioClip _missileClip;
 
@@ -112,7 +115,6 @@ public class PlayerScript : MonoBehaviour
     private CameraShakeScript _cameraShake;
 
     private GameManagerScript _gameManager;
-
 
     void Start()
     {
@@ -145,23 +147,32 @@ public class PlayerScript : MonoBehaviour
         {
             Debug.LogError("CameraShake is null");
         }
-        if(_gameManager == null)
+        if (_gameManager == null)
         {
             Debug.LogError("game manager is null");
         }
         _currentThrusterTime = _thrusterCD;
         _canThrusters = -1;
         _currAmmo = _totalAmmo;
-        _uiManagerScript.UpdateAmmoCount (_totalAmmo);
+        _uiManagerScript.UpdateAmmoCount (_currAmmo, _totalAmmo);
     }
 
     void Update()
     {
         MovePlayer();
-        if(Input.GetKey(KeyCode.Space) && _canMissileShot && Time.time > _nextMissile)
+        if (
+            Input.GetKey(KeyCode.Space) &&
+            _canMissileShot &&
+            Time.time > _nextMissile
+        )
         {
             FireMissile();
-        } else if (Input.GetKey(KeyCode.Space) && !_canMissileShot && Time.time > _canFire)
+        }
+        else if (
+            Input.GetKey(KeyCode.Space) &&
+            !_canMissileShot &&
+            Time.time > _canFire
+        )
         {
             FireLaser();
         }
@@ -173,11 +184,12 @@ public class PlayerScript : MonoBehaviour
         {
             BurnThrusters();
         }
-        else if(Input.GetKeyUp(KeyCode.LeftShift))
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             _speed = _initSpeed;
             _canThrusters = Time.time + _thrusterCD;
-        } else if(Time.time > _canThrusters)
+        }
+        else if (Time.time > _canThrusters)
         {
             RefillThrusters();
         }
@@ -232,10 +244,10 @@ public class PlayerScript : MonoBehaviour
             _audioSource.Play();
             return;
         }
-        else if(_gameManager.hasGameStarted)
+        else if (_gameManager.hasGameStarted)
         {
             _currAmmo--;
-            _uiManagerScript.UpdateAmmoCount (_currAmmo);
+            _uiManagerScript.UpdateAmmoCount (_currAmmo, _totalAmmo);
         }
         _canFire = Time.time + _fireRate;
         Vector3 laserStartPos =
@@ -259,20 +271,22 @@ public class PlayerScript : MonoBehaviour
     private void FireMissile()
     {
         _nextMissile = Time.time + _missileShotRate;
-        Instantiate(_missilePrefab, transform.position, Quaternion.Euler(0,0,90));
+        Instantiate(_missilePrefab,
+        transform.position,
+        Quaternion.Euler(0, 0, 90));
         _audioSource.clip = _missileClip;
         _audioSource.Play();
     }
 
     private void BurnThrusters()
     {
-        if(_speed != _boostedSpeed)
+        if (_speed != _boostedSpeed)
         {
             _initSpeed = _speed;
         }
         _speed = _boostedSpeed;
         _currentThrusterTime -= Time.deltaTime;
-        if(_currentThrusterTime <= 0)
+        if (_currentThrusterTime <= 0)
         {
             _currentThrusterTime = 0;
             _speed = _initSpeed;
@@ -383,6 +397,7 @@ public class PlayerScript : MonoBehaviour
     {
         _score += points;
         _uiManagerScript.UpdateScoreText (_score);
+        _spawnManagerScript.UpdateWaveProgress();
     }
 
     public void AddHealth()
@@ -390,14 +405,14 @@ public class PlayerScript : MonoBehaviour
         if (_lives < 3)
         {
             _lives++;
-        if (_lives == 3)
-        {
-            _rightEnginePrefab.SetActive(false);
-        }
-        if (_lives == 2)
-        {
-            _leftEnginePrefab.SetActive(false);
-        }
+            if (_lives == 3)
+            {
+                _rightEnginePrefab.SetActive(false);
+            }
+            if (_lives == 2)
+            {
+                _leftEnginePrefab.SetActive(false);
+            }
             _uiManagerScript.UpdateLivesImg (_lives);
         }
     }
@@ -405,6 +420,20 @@ public class PlayerScript : MonoBehaviour
     public void AddAmmo()
     {
         _currAmmo = _totalAmmo;
-        _uiManagerScript.UpdateAmmoCount (_currAmmo);
+        _uiManagerScript.UpdateAmmoCount (_currAmmo, _totalAmmo);
+    }
+
+    //reduce score
+    public void NegativePowerup(int negativePoints)
+    {
+        if (_score >= negativePoints)
+        {
+            _score -= negativePoints;
+        }
+        else
+        {
+            _score = 0;
+        }
+        _uiManagerScript.UpdateScoreText (_score);
     }
 }

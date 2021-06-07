@@ -15,6 +15,10 @@ public class PowerupScript : MonoBehaviour
 
     [SerializeField] //0 - triple, 1 - speed, 2 - shield, 3 - health, 4 - ammo, 5 - missile
     private int powerupID;
+    [SerializeField]
+    private int negativeScore;
+    [SerializeField]
+    private GameObject _explosionAnim;
 
     void Update()
     {
@@ -53,10 +57,22 @@ public class PowerupScript : MonoBehaviour
                     case 5:
                         player.TurnOnMissileShot();
                         break;
+                    case 6:
+                        player.NegativePowerup(negativeScore);
+                        break;
                 }
             }
             Destroy(transform.gameObject);
         }
+        if(other.gameObject.tag == "EnemyLaser")
+        {
+            // AudioSource.PlayClipAtPoint(_explosionClip, transform.position);
+            StartCoroutine(DoExplosionAnim(transform.position));
+            Destroy(this.gameObject);
+            Destroy(other.gameObject);
+
+        }
+        //if tag is enemy laser
     }
 
     private void CleanupPowerup()
@@ -66,4 +82,12 @@ public class PowerupScript : MonoBehaviour
             Destroy(transform.gameObject);
         }
     }
+
+    IEnumerator DoExplosionAnim(Vector3 pos)
+    {
+        GameObject gObj = Instantiate(_explosionAnim, pos, Quaternion.identity);
+        yield return new WaitForSeconds(1.0f);
+        Destroy(gObj);
+    }
+
 }

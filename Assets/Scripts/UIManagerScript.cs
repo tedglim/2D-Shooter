@@ -17,6 +17,8 @@ public class UIManagerScript : MonoBehaviour
 
     [SerializeField]
     private Text _gameOverText;
+    [SerializeField]
+    private Text _waveStatusText;
 
     [SerializeField]
     private Text _restartText;
@@ -33,6 +35,7 @@ public class UIManagerScript : MonoBehaviour
     private Image _thrusterBar;
     [SerializeField]
     private Text _ammoCount;
+
 
     private int _lives;
 
@@ -84,9 +87,30 @@ public class UIManagerScript : MonoBehaviour
         _thrusterBar.fillAmount = currThrusters / totalThrusters;
     }
 
-    public void UpdateAmmoCount(int ammo)
+    public void UpdateAmmoCount(int ammo, int total)
     {
-        _ammoCount.text = ammo.ToString();
+        _ammoCount.text = ammo.ToString() + "/" + total.ToString();
+    }
+
+    public void UpdateWaveStatus(bool empty, bool start, int num)
+    {
+        if(empty)
+        {
+            _waveStatusText.text = "";
+            return;
+        }
+        if(start)
+        {
+            _waveStatusText.text = "Wave " + num.ToString();
+        } else 
+        {
+            _waveStatusText.text = "Wave " + num.ToString() + " Complete";
+        }
+    }
+
+    public void UpdateWaveEndStatus()
+    {
+        _waveStatusText.text = "All Waves Completed";
     }
 
     public void DisplayGameOver()
