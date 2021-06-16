@@ -19,10 +19,18 @@ public class PowerupScript : MonoBehaviour
     private int negativeScore;
     [SerializeField]
     private GameObject _explosionAnim;
+    private bool isSpecialMove;
 
     void Update()
     {
-        transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        if(!isSpecialMove)
+        {
+            transform.Translate(Vector3.down * _speed * Time.deltaTime);
+        }
+        // else 
+        // {
+        //     Vector3.MoveTowards()
+        // }
         CleanupPowerup();
     }
 
@@ -90,4 +98,8 @@ public class PowerupScript : MonoBehaviour
         Destroy(gObj);
     }
 
+    public void TurnOffNormalMove()
+    {
+        isSpecialMove = true;
+    }
 }

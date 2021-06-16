@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6119985077810641903}
-  - component: {fileID: 1785482722875728948}
   - component: {fileID: 173342992870362268}
+  - component: {fileID: 3630454589343170585}
+  - component: {fileID: 1785482722875728948}
   m_Layer: 0
   m_Name: PowerupDetector
-  m_TagString: Enemy
+  m_TagString: PowerupDetectorCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,6 +33,41 @@ Transform:
   m_Father: {fileID: 486915130325460379}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &173342992870362268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856475522302622238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 141ac127f999f43f7bb4ffa21e78910c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _laser: {fileID: 1089434478465980373, guid: 457ff8304ad5949bbaa2cc030c787093, type: 3}
+  _laserOffset: {x: 0, y: -3, z: 0}
+--- !u!50 &3630454589343170585
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3856475522302622238}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &1785482722875728948
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -58,20 +94,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.5, y: 6}
   m_EdgeRadius: 0
---- !u!114 &173342992870362268
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3856475522302622238}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 141ac127f999f43f7bb4ffa21e78910c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _laser: {fileID: 1089434478465980373, guid: 457ff8304ad5949bbaa2cc030c787093, type: 3}
-  _laserOffset: {x: 0, y: -3, z: 0}
 --- !u!1 &7910143741183622354
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,11 +17,11 @@ public class EnemyAggroScript : EnemyBaseScript
 
     void Start() {
 
-        _player = GameObject.Find("Player").GetComponent<PlayerScript>();
-        if (_player == null)
-        {
-            Debug.LogError("Player is null");
-        }
+        // _player = GameObject.Find("Player").GetComponent<PlayerScript>();
+        // if (_player == null)
+        // {
+        //     Debug.LogError("Player is null");
+        // }
         _initSpd = _speed;
     }
 

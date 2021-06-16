@@ -15,6 +15,7 @@ public class EnemySmartScript : EnemyBaseScript
 
     [SerializeField]
     private float fireRangeX;
+
     [SerializeField]
     private Vector3 _laserBehindOffsetY;
 
@@ -52,7 +53,14 @@ public class EnemySmartScript : EnemyBaseScript
             transform.position + _laserBehindOffsetY,
             Quaternion.identity);
             canFireBehind = false;
-        } else if (_player.transform.position.y < this.transform.position.y)
+        }
+        else if (
+            _player.transform.position.y < this.transform.position.y ||
+            _player.transform.position.x <
+            this.transform.position.x - fireRangeX ||
+            _player.transform.position.x >
+            this.transform.position.x + fireRangeX
+        )
         {
             canFireBehind = true;
         }

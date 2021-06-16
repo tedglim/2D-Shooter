@@ -18,6 +18,14 @@ public class PowerupDetectorScript : MonoBehaviour
         if(other.gameObject.tag == "Powerup")
         {
             Instantiate(_laser, _enemy.position + _laserOffset, Quaternion.Euler(0,0,180));
-        }   
+        }  
+        if(other.gameObject.tag == "Player")
+        {
+            return;
+        } 
+        if(other.gameObject.tag == "Enemy")
+        {
+            return;
+        }
     }
 }

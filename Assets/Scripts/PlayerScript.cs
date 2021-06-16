@@ -87,6 +87,10 @@ public class PlayerScript : MonoBehaviour
     private float _missileShotRate;
 
     private float _nextMissile = -1;
+    [SerializeField]
+    private float _magnetRadius = 5;
+    [SerializeField]
+    private float _powerupSpeed = 3;
 
     private int _score = 0;
 
@@ -192,6 +196,10 @@ public class PlayerScript : MonoBehaviour
         else if (Time.time > _canThrusters)
         {
             RefillThrusters();
+        }
+        if (Input.GetKey(KeyCode.C))
+        {
+            CollectPowerups();
         }
     }
 
@@ -435,5 +443,41 @@ public class PlayerScript : MonoBehaviour
             _score = 0;
         }
         _uiManagerScript.UpdateScoreText (_score);
+    }
+
+    private void CollectPowerups()
+    {
+        Collider2D[] colliders =
+            Physics2D.OverlapCircleAll(transform.position, _magnetRadius);
+        foreach (Collider2D colliderr in colliders)
+        {
+            if (colliderr.gameObject.tag == "Powerup")
+            {
+                Debug.Log(colliderr.gameObject.name);
+                StartCoroutine(AttractPowerup(colliderr.gameObject));
+            }
+        }
+    }
+
+    IEnumerator AttractPowerup(GameObject pwrUp)
+    {
+        PowerupScript pwrScript = pwrUp.GetComponent<PowerupScript>();
+        pwrScript.TurnOffNormalMove();
+        while (true)
+        {
+            if (pwrUp != null)
+            {
+                pwrUp.transform.position =
+                    Vector3
+                        .MoveTowards(pwrUp.gameObject.transform.position,
+                        transform.position,
+                        _powerupSpeed * Time.deltaTime);
+                yield return new WaitForSeconds(0);
+            }
+            else
+            {
+                break;
+            }
+        }
     }
 }

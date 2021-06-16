@@ -83,7 +83,7 @@ public class EnemyBaseScript : MonoBehaviour
         }
     }
 
-    //check shield bheavior~!!!
+    //check shield behavior~!!!
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.tag == "Player")
@@ -117,6 +117,9 @@ public class EnemyBaseScript : MonoBehaviour
                 _player.AddToScore (_pointValue);
             }
             CleanupAndDie();
+        } else if (other.tag == "PowerupDetectorCollider")
+        {
+            return;
         }
     }
 

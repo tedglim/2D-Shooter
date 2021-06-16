@@ -9,6 +9,7 @@ TagManager:
   - EnemyLaser
   - Missile
   - Powerup
+  - PowerupDetectorCollider
   layers:
   - Default
   - TransparentFX

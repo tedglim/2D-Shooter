@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 2619446317750041934}
   - component: {fileID: 693920917720654567}
   - component: {fileID: 2267779504247985053}
+  - component: {fileID: 2936802154681321066}
   m_Layer: 0
   m_Name: PowerupDetector
-  m_TagString: Enemy
+  m_TagString: PowerupDetectorCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -72,6 +73,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _laser: {fileID: 1089434478465980373, guid: 457ff8304ad5949bbaa2cc030c787093, type: 3}
   _laserOffset: {x: 0, y: -3, z: 0}
+--- !u!50 &2936802154681321066
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965241875391334201}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &7910143741183622354
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +360,7 @@ MonoBehaviour:
   _pointValue: 10
   _laserFireCD: {x: 2, y: 4}
   _laser: {fileID: 1089434478465980373, guid: 457ff8304ad5949bbaa2cc030c787093, type: 3}
-  _laserOffsetY: {x: 0, y: 3, z: 0}
+  _laserOffsetY: {x: 0, y: -3, z: 0}
   _explosionClip: {fileID: 8300000, guid: a885c043fab7e46438bba03ba9dab6bc, type: 3}
   _minMaxXSpawnUD: {x: -5, y: 9}
   _minMaxYSpawnUD: {x: -7, y: 7}
